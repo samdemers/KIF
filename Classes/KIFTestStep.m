@@ -539,6 +539,31 @@ typedef CGPoint KIFDisplacement;
     }];
 }
 
++ (id)stepToSelectPickerViewRowWithDate:(NSDate*)date
+{
+    NSString *description = [NSString stringWithFormat:@"Select the \"%@\" date from the picker", date.description];
+    return [self stepWithDescription:description executionBlock:^(KIFTestStep *step, NSError **error) {
+        
+        UIPickerView *pickerView = [[[[UIApplication sharedApplication] pickerViewWindow] subviewsWithClassNameOrSuperClassNamePrefix:@"UIPickerView"] lastObject];
+        UIView *view = pickerView;
+        while (view && ![view isKindOfClass:[UIDatePicker class]]) view = view.superview;
+
+        UIDatePicker *datePicker = [view isKindOfClass:[UIDatePicker class]] ? (UIDatePicker *)view : nil;
+        KIFTestCondition(datePicker, error, @"No date picker is present");
+
+        [datePicker setDate:date animated:YES];
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.5, false);
+        
+        if ([pickerView.delegate respondsToSelector:@selector(pickerView:didSelectRow:inComponent:)]) {
+            [pickerView.delegate pickerView:pickerView didSelectRow:[pickerView selectedRowInComponent:0] inComponent:0];
+            [pickerView.delegate pickerView:pickerView didSelectRow:[pickerView selectedRowInComponent:1] inComponent:1];
+            [pickerView.delegate pickerView:pickerView didSelectRow:[pickerView selectedRowInComponent:2] inComponent:2];
+        }
+        
+        return KIFTestStepResultSuccess;
+    }];
+}
+
 + (id)stepToSetOn:(BOOL)switchIsOn forSwitchWithAccessibilityLabel:(NSString *)label;
 {
     NSString *description = [NSString stringWithFormat:@"Toggle the switch with accessibility label \"%@\" to %@", label, switchIsOn ? @"ON" : @"OFF"];

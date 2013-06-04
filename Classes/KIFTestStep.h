@@ -406,6 +406,15 @@ typedef KIFTestStepResult (^KIFTestStepExecutionBlock)(KIFTestStep *step, NSErro
 + (id)stepToSelectPickerViewRowWithTitle:(NSString *)title;
 
 /*!
+ @method stepToSelectPickerViewRowWithDate:
+ @abstract A step that selects a date from a currently visible date picker.
+ @discussion With a date picker already visible, this step will programatically select the given date in it.
+ @param date The date to select.
+ @result A configured test step.
+ */
++ (id)stepToSelectPickerViewRowWithDate:(NSDate*)date;
+
+/*!
  @method stepToSetOn:forSwitchWithAccessibilityLabel:
  @abstract A step that toggles a UISwitch into a specified position.
  @discussion The UISwitch with the given label is searched for in the view hierarchy. If the element isn't found or isn't currently tappable, then the step will attempt to wait until it is. Once the view is present, the step will return if it's already in the desired position. If the switch is tappable but not in the desired position, a tap event is simulated in the center of the view or element, toggling the switch into the desired position.
