@@ -449,6 +449,7 @@ typedef CGPoint KIFDisplacement;
         }
         
         UIView *view = [UIAccessibilityElement viewContainingAccessibilityElement:element];
+        if ([view respondsToSelector:@selector(setText:)]) [(id)view setText:nil];
         KIFTestWaitCondition(view, error, @"Cannot find view with accessibility label \"%@\"", label);
                 
         CGRect elementFrame = [view.window convertRect:element.accessibilityFrame toView:view];
