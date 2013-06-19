@@ -973,6 +973,11 @@ typedef CGPoint KIFDisplacement;
     if (scrollView) {
         if ((UIAccessibilityElement *)view == element) {
             [scrollView scrollViewToVisible:view animated:YES];
+        } else if ([scrollView isKindOfClass:[UITableView class]] &&
+                   [element.accessibilityContainer respondsToSelector:@selector(indexPath)]) {
+            UITableView *tableView = (UITableView *)scrollView;
+            NSIndexPath *indexPath = [element.accessibilityContainer indexPath];
+            [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         } else {
             CGRect elementFrame = [view.window convertRect:element.accessibilityFrame toView:scrollView];
             [scrollView scrollRectToVisible:elementFrame animated:YES];
